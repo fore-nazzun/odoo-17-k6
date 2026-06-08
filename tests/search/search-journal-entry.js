@@ -14,13 +14,13 @@ export const handleSummary = reportSummary([
 ]);
 
 const SPEC = {
-  name: {},
-  date: {},
-  ref: {},
-  state: {},
+  name:         {},
+  date:         {},
+  ref:          {},
+  state:        {},
   amount_total: {},
-  journal_id: { fields: { display_name: {} } },
-  partner_id: { fields: { display_name: {} } },
+  journal_id:   { fields: { display_name: {} } },
+  partner_id:   { fields: { display_name: {} } },
 };
 
 export default function () {

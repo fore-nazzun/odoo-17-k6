@@ -14,14 +14,14 @@ export const handleSummary = reportSummary([
 ]);
 
 const SPEC = {
-  name: {},
-  date: {},
-  ref: {},
-  debit: {},
-  credit: {},
-  balance: {},
+  name:       {},
+  date:       {},
+  ref:        {},
+  debit:      {},
+  credit:     {},
+  balance:    {},
   account_id: { fields: { display_name: {} } },
-  move_id: { fields: { display_name: {} } },
+  move_id:    { fields: { display_name: {} } },
   partner_id: { fields: { display_name: {} } },
 };
 

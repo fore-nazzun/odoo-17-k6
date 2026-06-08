@@ -14,11 +14,11 @@ export const handleSummary = reportSummary([
 ]);
 
 const SPEC = {
-  name: {},
-  date_order: {},
+  name:         {},
+  date_order:   {},
   amount_total: {},
-  state: {},
-  partner_id: { fields: { display_name: {} } },
+  state:        {},
+  partner_id:   { fields: { display_name: {} } },
 };
 
 export default function () {
