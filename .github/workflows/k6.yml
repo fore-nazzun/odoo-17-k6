@@ -1,0 +1,58 @@
+name: k6 Odoo tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Test file to run, or 'all'"
+        default: "all"
+      run_label:
+        description: "RUN_LABEL for the results"
+        default: "ci"
+
+jobs:
+  k6:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install k6
+        uses: grafana/setup-k6-action@v1
+
+      - name: Build env.json from secrets
+        env:
+          ODOO_BASE_URL: ${{ secrets.ODOO_BASE_URL }}
+          ODOO_DB: ${{ secrets.ODOO_DB }}
+          ODOO_LOGIN: ${{ secrets.ODOO_LOGIN }}
+          ODOO_API_KEY: ${{ secrets.ODOO_API_KEY }}
+          ODOO_COMPANY_ID: ${{ secrets.ODOO_COMPANY_ID }}
+          RUN_LABEL: ${{ inputs.run_label }}
+        run: |
+          node -e '
+            const e = process.env;
+            require("fs").writeFileSync("env.json", JSON.stringify({
+              ODOO_BASE_URL: e.ODOO_BASE_URL,
+              ODOO_DB: e.ODOO_DB,
+              ODOO_LOGIN: e.ODOO_LOGIN,
+              ODOO_API_KEY: e.ODOO_API_KEY,
+              ODOO_COMPANY_ID: e.ODOO_COMPANY_ID || "",
+              RUN_LABEL: e.RUN_LABEL || "ci",
+            }));
+          '
+
+      - name: Run
+        run: |
+          if [ "${{ inputs.target }}" = "all" ]; then
+            ./run-all.sh
+          else
+            mkdir -p results/_run
+            k6 run "${{ inputs.target }}"
+            node aggregate.js
+          fi
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-results
+          path: results/*.csv
