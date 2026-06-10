@@ -18,6 +18,9 @@ on:
       duration:
         description: "Run for a duration instead, e.g. 30s, 2m (blank = use iterations)"
         default: ""
+      max_duration:
+        description: "Whole-run cap for iterations mode"
+        default: "60m"
       timeout:
         description: "Per-request timeout (raise for heavy reports)"
         default: "1200s"
@@ -42,6 +45,7 @@ jobs:
           VUS: ${{ inputs.vus }}
           ITERATIONS: ${{ inputs.iterations }}
           DURATION: ${{ inputs.duration }}
+          MAX_DURATION: ${{ inputs.max_duration }}
           ODOO_TIMEOUT: ${{ inputs.timeout }}
         run: |
           node -e '
@@ -57,6 +61,7 @@ jobs:
               VUS: e.VUS || "1",
               ITERATIONS: e.ITERATIONS || "1",
               DURATION: e.DURATION || "",
+              MAX_DURATION: e.MAX_DURATION || "60m",
             }));
           '
 

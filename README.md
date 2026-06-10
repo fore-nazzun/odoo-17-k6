@@ -49,6 +49,7 @@ cp env.example.json env.json   # fill in ODOO_BASE_URL, ODOO_DB, ODOO_LOGIN, ODO
 | `VUS` | `1` | virtual users |
 | `ITERATIONS` | `1` | iterations (ignored if `DURATION` set) |
 | `DURATION` | | run for a time, e.g. `30s` |
+| `MAX_DURATION` | `60m` | whole-run cap for iterations mode |
 
 `ODOO_DB` must contain `fore_odoo_17`, `fore-odoo-16`, or `staging`, otherwise the
 run aborts — these write tests must not hit production.

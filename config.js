@@ -31,14 +31,21 @@ if (!ALLOWED_DB.some((s) => db.includes(s))) {
 }
 
 export const LOAD = {
-  vus:        Number(cfg('VUS', 1)),
-  iterations: cfg('ITERATIONS', '') ? Number(cfg('ITERATIONS', '')) : undefined,
-  duration:   cfg('DURATION', '') || undefined,
+  vus:         Number(cfg('VUS', 1)),
+  iterations:  cfg('ITERATIONS', '') ? Number(cfg('ITERATIONS', '')) : undefined,
+  duration:    cfg('DURATION', '') || undefined,
+  // cap for the whole run; default 60m so heavy reports aren't cut off at k6's 10m default
+  maxDuration: cfg('MAX_DURATION', '60m'),
 };
 
 export function loadOptions(extraThresholds = {}) {
-  const opts = {
-    vus: LOAD.vus,
+  // Use a scenarios block so maxDuration is configurable (the vus+iterations
+  // shorthand forces k6's 10m default and can't override it).
+  const scenario = LOAD.duration
+    ? { executor: 'constant-vus', vus: LOAD.vus, duration: LOAD.duration }
+    : { executor: 'shared-iterations', vus: LOAD.vus, iterations: LOAD.iterations || 1, maxDuration: LOAD.maxDuration };
+  return {
+    scenarios: { default: scenario },
     thresholds: Object.assign(
       {
         checks:          ['rate>0.99'],
@@ -48,10 +55,4 @@ export function loadOptions(extraThresholds = {}) {
       extraThresholds
     ),
   };
-  if (LOAD.duration) {
-    opts.duration = LOAD.duration;
-  } else {
-    opts.iterations = LOAD.iterations || 1;
-  }
-  return opts;
 }
