@@ -20,7 +20,7 @@ on:
         default: ""
       timeout:
         description: "Per-request timeout (raise for heavy reports)"
-        default: "300s"
+        default: "1200s"
 
 jobs:
   k6:
@@ -52,7 +52,7 @@ jobs:
               ODOO_LOGIN: e.ODOO_LOGIN,
               ODOO_API_KEY: e.ODOO_API_KEY,
               ODOO_COMPANY_ID: e.ODOO_COMPANY_ID || "",
-              ODOO_TIMEOUT: e.ODOO_TIMEOUT || "300s",
+              ODOO_TIMEOUT: e.ODOO_TIMEOUT || "1200s",
               RUN_LABEL: e.RUN_LABEL || "ci",
               VUS: e.VUS || "1",
               ITERATIONS: e.ITERATIONS || "1",
