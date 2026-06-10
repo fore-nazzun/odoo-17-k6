@@ -9,6 +9,18 @@ on:
       run_label:
         description: "RUN_LABEL for the results"
         default: "ci"
+      vus:
+        description: "Virtual users"
+        default: "1"
+      iterations:
+        description: "Iterations (ignored if duration set)"
+        default: "1"
+      duration:
+        description: "Run for a duration instead, e.g. 30s, 2m (blank = use iterations)"
+        default: ""
+      timeout:
+        description: "Per-request timeout (raise for heavy reports)"
+        default: "300s"
 
 jobs:
   k6:
@@ -19,7 +31,7 @@ jobs:
       - name: Install k6
         uses: grafana/setup-k6-action@v1
 
-      - name: Build env.json from secrets
+      - name: Build env.json from secrets + inputs
         env:
           ODOO_BASE_URL: ${{ secrets.ODOO_BASE_URL }}
           ODOO_DB: ${{ secrets.ODOO_DB }}
@@ -27,6 +39,10 @@ jobs:
           ODOO_API_KEY: ${{ secrets.ODOO_API_KEY }}
           ODOO_COMPANY_ID: ${{ secrets.ODOO_COMPANY_ID }}
           RUN_LABEL: ${{ inputs.run_label }}
+          VUS: ${{ inputs.vus }}
+          ITERATIONS: ${{ inputs.iterations }}
+          DURATION: ${{ inputs.duration }}
+          ODOO_TIMEOUT: ${{ inputs.timeout }}
         run: |
           node -e '
             const e = process.env;
@@ -36,7 +52,11 @@ jobs:
               ODOO_LOGIN: e.ODOO_LOGIN,
               ODOO_API_KEY: e.ODOO_API_KEY,
               ODOO_COMPANY_ID: e.ODOO_COMPANY_ID || "",
+              ODOO_TIMEOUT: e.ODOO_TIMEOUT || "300s",
               RUN_LABEL: e.RUN_LABEL || "ci",
+              VUS: e.VUS || "1",
+              ITERATIONS: e.ITERATIONS || "1",
+              DURATION: e.DURATION || "",
             }));
           '
 
