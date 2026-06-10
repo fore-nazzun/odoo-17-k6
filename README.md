@@ -67,8 +67,9 @@ k6 run -e VUS=10 -e DURATION=1m tests/reports/balance-sheet.js   # load test
 `run-all.sh` aggregates each test into two CSVs under `results/` (open in Excel):
 
 - `summary.csv` — full history, one row per call per run:
-  `run_label, test, model, method, iterations, correctness_pass_rate,
-  http_req_failed_rate, op_avg_ms, op_p95_ms, op_max_ms, http_p95_ms`.
+  `run_label, base_url, login, company_id, test, model, method, iterations,
+  correctness_pass_rate, http_req_failed_rate, op_avg_ms, op_p95_ms, op_max_ms,
+  http_p95_ms`.
 - `comparison.csv` — side-by-side p95, one column per `RUN_LABEL`.
 
 Set `RUN_LABEL` per run to compare (e.g. different credentials):

@@ -12,7 +12,7 @@ const SUMMARY = path.join(RESULTS, 'summary.csv');
 const COMPARISON = path.join(RESULTS, 'comparison.csv');
 
 const COLUMNS = [
-  'run_label', 'test', 'model', 'method', 'iterations',
+  'run_label', 'base_url', 'login', 'company_id', 'test', 'model', 'method', 'iterations',
   'correctness_pass_rate', 'http_req_failed_rate',
   'op_avg_ms', 'op_p95_ms', 'op_max_ms', 'http_p95_ms',
 ];
